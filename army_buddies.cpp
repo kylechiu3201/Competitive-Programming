@@ -47,13 +47,11 @@ bool is_prime(ll a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); +
 #define mp make_pair
 #define fi first
 #define se second
-#define GCD(a,b) __gcd(a,b)
-#define LCM(a,b) (a*(b/gcd(a,b)))
-#define IN_RANGE(i,a,b) ((i >= min(a, b)) && (i <= max(a, b)))
-#define GET_DIRS(i,j) {{(i)-1, (j)}, {(i)+1, (j)}, {(i), (j)-1}, {(i), (j)+1}}
-#define SWAP(a,b) a ^= b; b ^= a; a ^= b
-#define NUM_DIG(n) (floor(log10(n))+1)
-#define IS_POW_2(n) (n && (!(n&(n-1))))
+#define gcd(a,b) __gcd(a,b)
+#define lcm(a,b) (a*(b/gcd(a,b)))
+#define in_range(i,a,b) ((i >= min(a, b)) && (i <= max(a, b)))
+#define get_dirs(i,j) {{(i)-1, (j)}, {(i)+1, (j)}, {(i), (j)-1}, {(i), (j)+1}}
+#define TESTS(x) int x; cin >> x; while(x--)
 #define ALL(a) (a).begin(), (a).end()
 #define RALL(a) (a).rbegin(), (a).rend()
 #define FOR(i,n) for(int i = 0; i < n; ++i)
@@ -77,7 +75,40 @@ void print_vec(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; c
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    // int l, r, s, b;
+    // int s, b;
+    // int left[100005], right[100005];
+    // vi left(100005), right(100005);
+    for(;;) {
+        int s, b;
+        // scanf("%d %d", &s, &b);
+        cin >> s >> b;
+        if(!s && !b) break;
+        int left[100005], right[100005];
+        for(int i = 1; i <= s; ++i) left[i] = i-1, right[i] = i+1;
+        left[1] = 0, right[s] = 0;
+        for(; b--;) {
+            int l, r;
+            cin >> l >> r;
+            // scanf("%d %d", &l, &r);
+            // if(right[r] != -1)
+            left[right[r]] = left[l];
+            // left[l] == 0 ? printf("*") : printf("%d", left[l]);
+            left[l] == 0 ? cout << "*" : cout << left[l];
+            // cout << (left[l] == -1 ? "*" : to_string(left[l]));
+            // if(left[l] == -1) printf("*");
+            // else printf("%d", left[l]);
+            // if(left[l] != -1)
+            right[left[l]] = right[r];
+            // right[r] == 0 ? printf(" *\n") : printf(" %d\n", right[r]);
+            right[r] == 0 ? cout << " *\n" : cout << " " << right[r] << NEWL;
+            // cout << (right[r] == -1 ? " *\n" : " "+to_string(right[r])+NEWL);
+            // if(right[r] == -1) printf(" *\n");
+            // else printf(" %d\n", right[r]);
+        }
+        cout << "-\n";
+        // printf("-\n");
+    }
 
     return 0;
 }

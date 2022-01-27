@@ -11,10 +11,10 @@
 using namespace std;
 
 int main() {
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
+    ios_base::sync_with_stdio(0); cin.tie(0);
     string line;
     string num_to_letter = "CDHS";
+    unordered_map<char, int> m = {{'A', 1}, {'T', 10}, {'J', 11}, {'Q', 12}, {'K', 13}, {'C', 0}, {'D', 1}, {'H', 2}, {'S', 3}};
     while(getline(cin, line)) {
         int faces[4][4] = {0};
         int suits[4] = {0};
@@ -25,11 +25,11 @@ int main() {
         for(int i = 0; i <= n; ++i) {
             if(card == '*') {
                 card = line[i];
-                card = (card == 'A') ? 1 : (card == 'J') ? 11 : (card == 'Q') ? 12 : (card == 'K') ? 13 : (card == 'T') ? 10 : card-'0';
+                card = (card >= '2' && card <= '9') ? card-'0' : m[card];
             }
             else if(suit == '*') {
                 suit = line[i];
-                suit = (suit == 'C') ? 0 : (suit == 'D') ? 1 : (suit == 'H') ? 2 : 3;
+                suit = m[suit];
             }
             else {
                 ++suits[suit];
