@@ -46,11 +46,9 @@ bool is_prime(int a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); 
 bool is_prime(ll a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); ++i) if(a%i == 0) return 0; return 1; }
 
 #define pb push_back
-#define pf push_front
 #define mp make_pair
 #define fi first
 #define se second
-#define elif else if
 #define GCD(a,b) __gcd(a,b)
 #define LCM(a,b) (a*(b/gcd(a,b)))
 #define IN_RANGE(i,a,b) ((i >= min(a, b)) && (i <= max(a, b)))
@@ -79,7 +77,7 @@ bool is_prime(ll a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); +
 #define SCIII(a,b,c) scanf("%d %d %d", &(a), &(b), &(c))
 #define SCL(a) scanf("%lld", &(a))
 #define SCC(a) scanf("%c", &(a))
-#define SCS(a) scanf("%s", (a))
+#define SCS(a) scanf("%s", &(a))
 #define PNEWL printf("\n")
 #define PF printf
 
@@ -89,7 +87,45 @@ void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout <
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    // char line[100001];
+    string line;
+    typedef struct LNode {
+        char val;
+        LNode* next;
+    } LNode;
+    // while(scanf("%s", line)) {
+    while(getline(cin, line)) {
+        int n = line.size(), len = 0;
+        LNode ans;
+        LNode* trav = &ans;
+        LNode* ins = trav;
+        bool back = true;
+        for(int idx = 0; idx < n; ++idx) {
+            char cur = line[idx];
+            if(cur == '[') back = false, ins = &ans;
+            else if(cur == ']') back = true;
+            else if(back) {
+                trav->next = new LNode(); trav->next->val = cur;
+                ins = &ans;
+                trav = trav->next;
+            }
+            else {
+                LNode* save = ins->next;
+                ins->next = new LNode(); ins->next->val = cur;
+                ins->next->next = save;
+                ins = ins->next;
+            }
+        }
+        trav = ans.next;
+        while(trav) {
+            // PF("%c", trav->val); LNode* save = trav->next;
+            cout << trav->val; LNode* save = trav->next;
+            delete trav;
+            trav = save;
+        }
+        cout << NEWL;
+        // PNEWL;
+    }
 
     return 0;
 }

@@ -89,7 +89,33 @@ void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout <
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    int n;
+    while(1) {
+        SCI(n);
+        if(!n) break;
+        map<set<int>, int> m;
+        umii track;
+        for(int i = 0; i < n; ++i) {
+            set<int> temp;
+            int num;
+            for(int j = 0; j < 5; ++j) {
+                SCI(num);
+                temp.insert(num);
+            }
+            ++m[temp];
+        }
+        int max_num = -1;
+        int ans = 0;
+        for(auto pair : m) {
+            if(pair.second > max_num) {
+                max_num = pair.second;
+                ans = pair.second;
+            }
+            else if(max_num == pair.second)
+                ans += pair.second;
+        }
+        PF("%d\n", ans);
+    }
 
     return 0;
 }

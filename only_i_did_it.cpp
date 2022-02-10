@@ -46,11 +46,9 @@ bool is_prime(int a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); 
 bool is_prime(ll a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); ++i) if(a%i == 0) return 0; return 1; }
 
 #define pb push_back
-#define pf push_front
 #define mp make_pair
 #define fi first
 #define se second
-#define elif else if
 #define GCD(a,b) __gcd(a,b)
 #define LCM(a,b) (a*(b/gcd(a,b)))
 #define IN_RANGE(i,a,b) ((i >= min(a, b)) && (i <= max(a, b)))
@@ -79,7 +77,7 @@ bool is_prime(ll a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); +
 #define SCIII(a,b,c) scanf("%d %d %d", &(a), &(b), &(c))
 #define SCL(a) scanf("%lld", &(a))
 #define SCC(a) scanf("%c", &(a))
-#define SCS(a) scanf("%s", (a))
+#define SCS(a) scanf("%s", &(a))
 #define PNEWL printf("\n")
 #define PF printf
 
@@ -89,7 +87,34 @@ void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout <
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    int t, c = 1;
+    SCI(t);
+    while(t--) {
+        umivi m;
+        FOR(i, 3) {
+            int n, x;
+            SCI(n);
+            FOR(j, n) {
+                SCI(x);
+                m[x].pb(i);
+            }
+        }
+        vi count(3);
+        set<int> s1, s2, s3;
+        vector<set<int>*> track = {&s1, &s2, &s3};
+        for(auto pair : m)
+            if(pair.se.size() == 1)
+                ++count[pair.se[0]], track[pair.se[0]]->insert(pair.fi);
+        int best = max({count[1], count[2], count[0], 0});
+        PF("Case #%d:\n", c++);
+        FOR(i, 3) {
+            if(count[i] == best) {
+                PF("%d %d", i+1, best);
+                for(auto num : *track[i]) PF(" %d", num);
+                PNEWL;
+            }
+        }
+    }
 
     return 0;
 }

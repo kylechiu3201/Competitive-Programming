@@ -86,10 +86,53 @@ bool is_prime(ll a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); +
 template <class T>
 void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout << "\b\b}"; }
 
+void get_primes(ll n, bitset<1000001>& bs, vi& primes) {
+    bs.set();
+    bs[0] = bs[1] = 0;
+    for(ll i = 2; i <= 1000001; ++i) {
+        if(bs[i]) {
+            for(ll j = i*i; j <= 1000001; j += i)
+                bs[j] = 0;
+            primes.pb((int)i);
+        }
+    }
+}
+
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    int n;
+    bitset<1000001> bs;
+    vi primes;
+    get_primes(1000001, bs, primes);
+    while(1) {
+        SCI(n);
+        if(!n) break;
+        // // O(logn) binary search
+        // auto it = upper_bound(primes.begin(), primes.end(), n); --it;
+        // int idx = it-primes.begin();
+        // int left = 0, right = idx;
+        bool flag = false;
+        // // Optimized O(n) two-pointer search
+        // while(left <= right && !flag) {
+        //     int total = primes[left]+primes[right];
+        //     if(total == n) flag = true;
+        //     elif(total > n) --right;
+        //     else ++left;
+        // }
+
+        // Apparently doesn't matter since unoptimized O(n) still runs fast
+        int a, b;
+        for(int i = 2; i < 1000001 && !flag; ++i) {
+            a = i, b = n-i;
+            if(!bs[a] || !bs[b]) continue;
+            flag = true;
+        }
+        // if(flag) PF("%d = %d + %d", n, primes[left], primes[right]);
+        if(flag) PF("%d = %d + %d", n, a, b);
+        else PF("Goldback's conjecture is wrong.");
+        PNEWL;
+    }
 
     return 0;
 }
