@@ -87,45 +87,64 @@ void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout <
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    // char line[100001];
     string line;
-    typedef struct LNode {
-        char val;
-        LNode* next;
-    } LNode;
-    // while(scanf("%s", line)) {
     while(getline(cin, line)) {
-        int n = line.size(), len = 0;
-        LNode ans;
-        LNode* trav = &ans;
-        LNode* ins = trav;
-        bool back = true;
+        int n = line.size();
+        n = line.size();
+        bool front = false;
+        string back;
+        vs vecfront;
+        string cur_front;
         for(int idx = 0; idx < n; ++idx) {
             char cur = line[idx];
-            if(cur == '[') back = false, ins = &ans;
-            else if(cur == ']') back = true;
-            else if(back) {
-                trav->next = new LNode(); trav->next->val = cur;
-                ins = &ans;
-                trav = trav->next;
+            if(cur == '[') {
+                if(cur_front.size() > 0) vecfront.pb(cur_front), cur_front = "";
+                front = true;  
             }
+            else if(cur == ']')
+                front = false;
+            else if(front)
+                cur_front += cur;
             else {
-                LNode* save = ins->next;
-                ins->next = new LNode(); ins->next->val = cur;
-                ins->next->next = save;
-                ins = ins->next;
+                if(cur_front.size() > 0) vecfront.pb(cur_front), cur_front = "";
+                back += cur;
             }
         }
-        trav = ans.next;
-        while(trav) {
-            // PF("%c", trav->val); LNode* save = trav->next;
-            cout << trav->val; LNode* save = trav->next;
-            delete trav;
-            trav = save;
-        }
-        cout << NEWL;
-        // PNEWL;
+        if(cur_front.size() > 0) vecfront.pb(cur_front);
+        n = vecfront.size();
+        for(int i = n-1; i >= 0; --i)
+            cout << vecfront[i];
+        cout << back << NEWL;
     }
+
+    // char line[100001];
+    // while(fgets(line, 100001, stdin)) {
+    //     int idx = 0;
+    //     bool front = false;
+    //     string back;
+    //     vs vecfront;
+    //     string cur_front;
+    //     while(line[idx] != '\r' && line[idx] != '\n') {
+    //         char cur = line[idx++];
+    //         if(cur == '[') {
+    //             if(cur_front.size() > 0) vecfront.pb(cur_front), cur_front = "";
+    //             front = true;   
+    //         }
+    //         else if(cur == ']')
+    //             front = false;
+    //         else if(front)
+    //             cur_front += cur;
+    //         else {
+    //             if(cur_front.size() > 0) vecfront.pb(cur_front), cur_front = "";
+    //             back += cur;
+    //         }
+    //     }
+    //     if(cur_front.size() > 0) vecfront.pb(cur_front);
+    //     int n = vecfront.size();
+    //     for(int i = n-1; i >= 0; --i)
+    //         PF("%s", vecfront[i].c_str());
+    //     PF("%s\n", back.c_str());
+    // }
 
     return 0;
 }
