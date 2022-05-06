@@ -23,8 +23,6 @@ typedef vector<string> vs;
 typedef vector<vs> vvs;
 typedef vector<pss> vpss;
 typedef vector<vpss> vvpss;
-typedef vector<char> vc;
-typedef vector<vector<char>> vvc;
 typedef unordered_map<int, int> umii;
 typedef unordered_map<int, vector<int>> umivi;
 typedef map<int, int> mii;
@@ -91,7 +89,38 @@ void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout <
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    int t, p, n, coin;
+    cin >> t;
+    while(t--) {
+        cin >> p >> n;
+        vector<int> coins(n);
+        for(int i = 0; i < n; ++i) cin >> coins[i];
+
+        vector<int> dp(20001, INT_MAX);
+        dp[0] = 0;
+        // Correct for some reason
+        // Only difference is the order which idk doesn't seem like it makes sense
+        for(auto coin : coins)
+            for(int price = 20000; price >= coin; --price)
+                if(dp[price-coin] != INT_MAX)
+                    dp[price] = min(dp[price], dp[price-coin]+1);
+
+        // Incorrect for some reason
+        // for(auto coin : coins)
+        //     for(int price = coin; price <= 20000; ++price)
+        //         if(dp[price-coin] != INT_MAX)
+        //             dp[price] = min(dp[price], dp[price-coin]+1);
+
+        // Also incorrect for some reason
+        // for(int i = coins.size()-1; i >= 0; --i) {
+        //     int coin = coins[i];
+        //     for(int price = coin; price <= 20000; ++price)
+        //         if(dp[price-coin] != INT_MAX)
+        //             dp[price] = min(dp[price], dp[price-coin]+1);
+        // }
+        while(dp[p] == INT_MAX) ++p;
+        cout << p << " " << dp[p] << '\n';
+    }
 
     return 0;
 }

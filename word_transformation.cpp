@@ -91,7 +91,68 @@ void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout <
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    int n; cin >> n;
+    while(n--) {
+        unordered_set<string> st;
+        string temp;
+        vector<pss> cases;
+        while(getline(cin, temp)) {
+            if(temp == "*") break;
+            st.insert(temp);
+        }
+        while(getline(cin, temp)) {
+            if(temp.empty()) break;
+            pss pair;
+            string temp2;
+            for(int i = 0, n = temp.size(); i <= n; ++i) {
+                if(i == n || temp[i] == ' ') (i == n ? pair.se = temp2 : pair.fi = temp2, temp2 = "");
+                else temp2 += temp[i];
+            }
+            cases.pb(pair);
+        }
+
+        for(auto p : cases) {
+            string start = p.fi, end = p.se;
+            unordered_set<string> dict = st;
+            queue<string> q; q.push(start);
+            dict.erase(start);
+            int count = 0;
+            bool done = false;
+
+            while(!q.empty() && !done) {
+                int size = q.size();
+                while(size--) {
+                    string cur = q.front(); q.pop();
+                    if(cur == end) {
+                        done = true;
+                        break;
+                    }
+                    for(int i = 0, n = cur.size(); i < n; ++i) {
+                        char save = cur[i];
+                        for(char c = 'a'; c <= 'z'; ++c) {
+                            cur[i] = c;
+                            if(dict.count(cur)) {
+                                q.push(cur);
+                                dict.erase(cur);
+                            }
+                        }
+                        cur[i] = save;
+                        // for(char c = '0'; c <= '9'; ++c) {
+                        //     cur[i] = c;
+                        //     if(dict.count(cur)) {
+                        //         q.push(cur);
+                        //         dict.erase(cur);
+                        //     }
+                        // }
+                        // cur[i] = save;
+                    }
+                }
+                if(!done) ++count;
+            }
+            cout << start << " " << end << " " << count << '\n';
+        }
+        if(n) cout << '\n';
+    }
 
     return 0;
 }

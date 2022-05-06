@@ -91,7 +91,53 @@ void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout <
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    const pii EXIT = {INT_MAX, INT_MAX};
+    int r, c, s;
+    char temp;
+    unordered_map<char, pii> m = {{'N', {-1, 0}}, {'S', {1, 0}}, {'E', {0, 1}}, {'W', {0, -1}}};
+    while(1) {
+        cin >> r >> c >> s;
+        if(!r && !c && !s) break;
+        --s;
+        vvpii grid(r, vpii(c));
+        for(int i = 0; i < r; ++i) {
+            for(int j = 0; j < c; ++j) {
+                cin >> temp;
+                pii cur = {i+m[temp].fi, j+m[temp].se};
+                if(cur.fi < 0 || cur.fi >= r || cur.se < 0 || cur.se >= c) cur = {INT_MAX, INT_MAX};
+                grid[i][j] = cur;
+            }
+        }
+        pii slow = {0, s}, fast = {0, s};
+        int count_exit = 0;
+        while(fast != EXIT && grid[fast.fi][fast.se] != EXIT) {
+            pii save = fast;
+            slow = grid[slow.fi][slow.se];
+            fast = grid[fast.fi][fast.se];
+            fast = grid[fast.fi][fast.se];
+            ++count_exit;
+            if(fast == save) --count_exit;
+            if(slow == fast) break;
+        }
+        bool loop = slow == fast && fast != EXIT && grid[0][s] != EXIT;
+        int before = 0;
+        if(loop) {
+            slow = {0, s};
+            while(slow != fast) {
+                slow = grid[slow.fi][slow.se];
+                fast = grid[fast.fi][fast.se];
+                ++before;
+            }
+        }
+        else {
+            while(slow != EXIT) {
+                slow = grid[slow.fi][slow.se];
+                ++count_exit;
+            }
+        }
+        if(loop) cout << before << " step(s) before a loop of " << count_exit << " step(s)" << '\n';
+        else cout << count_exit << " step(s) to exit" << '\n';
+    }
 
     return 0;
 }

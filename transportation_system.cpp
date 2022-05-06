@@ -88,10 +88,60 @@ bool is_prime(ll a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); +
 template <class T>
 void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout << "\b\b}"; }
 
+int get_parent(vi& parent, int node) {
+    if(parent[node] == -1) return node;
+    return get_parent(parent, parent[node]);
+}
+
+void join(vi& parent, int par_u, int v) {
+    int next = parent[v];
+    parent[v] = par_u;
+    if(next != -1) join(parent, par_u, next);
+}
+
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    typedef pair<double, pii> pdpii;
+    int t, n, r, x, y, cse = 1;
+    cin >> t;
+    while(t--) {
+        cin >> n >> r;
+        vpii points(n);
+        for(int i = 0; i < n; ++i) {
+            cin >> x >> y;
+            points[i] = {x, y};
+        }
+        priority_queue<pdpii, vector<pdpii>, greater<pdpii>> pq;
+        vi visited(n, 0);
+        pq.push({0, {0, 0}});
+        int count = 0;
+        int states = 0;
+        double roads = 0, rails = 0;
+        vi parent(n, -1);
+        while(!pq.empty()) {
+            auto front = pq.top(); pq.pop();
+            double dist = front.fi;
+            int source = front.se.fi, dest = front.se.se;
+            if(visited[dest]) continue;
+            visited[dest] = true;
+            if(dist > r) rails += dist;
+            else {
+                roads += dist;
+                int par_s = get_parent(parent, source), par_d = get_parent(parent, dest);
+                if(par_s != par_d) join(parent, par_s, dest);
+            }
+            if(++count == n) break;
+            for(int k = 0; k < n; ++k) {
+                if(visited[k]) continue;
+                int x_diff = points[k].fi-points[dest].fi, y_diff = points[k].se-points[dest].se;
+                double dist = sqrt((x_diff*x_diff)+(y_diff*y_diff));
+                pq.push({dist, {dest, k}});
+            }
+        }
+        for(auto node : parent) if(node == -1) ++states;
+        cout << "Case #" << cse++ << ": " << states << " " << round(roads) << " " << round(rails) << NEWL;
+    }
 
     return 0;
 }

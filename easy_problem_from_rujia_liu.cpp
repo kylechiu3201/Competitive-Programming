@@ -23,8 +23,6 @@ typedef vector<string> vs;
 typedef vector<vs> vvs;
 typedef vector<pss> vpss;
 typedef vector<vpss> vvpss;
-typedef vector<char> vc;
-typedef vector<vector<char>> vvc;
 typedef unordered_map<int, int> umii;
 typedef unordered_map<int, vector<int>> umivi;
 typedef map<int, int> mii;
@@ -91,7 +89,19 @@ void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout <
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    int n, m, temp, k, v, ans;
+    while(cin >> n >> m) {
+        umivi table;
+        for(int i = 0; i < n; ++i) {
+            cin >> temp;
+            table[temp].pb(i+1);
+        }
+        while(m--) {
+            cin >> k >> v;
+            ans = (table.count(v) ? k > table[v].size() ? 0 : table[v][k-1] : 0);
+            cout << ans << '\n';
+        }
+    }
 
     return 0;
 }

@@ -88,10 +88,39 @@ bool is_prime(ll a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); +
 template <class T>
 void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout << "\b\b}"; }
 
+void dfs(vvc& grid, int i, int j, int n) {
+    if(i < 0 || i >= n || j < 0 || j >= n || grid[i][j] == '.') return;
+    grid[i][j] = '.';
+    dfs(grid, i-1, j, n);
+    dfs(grid, i+1, j, n);
+    dfs(grid, i, j-1, n);
+    dfs(grid, i, j+1, n);
+}
+
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    int t, n;
+    char temp;
+    cin >> t;
+    for(int c = 1; c <= t; ++c) {
+        int ans = 0;
+        cin >> n;
+        vvc grid(n, vc(n));
+        for(int i = 0; i < n; ++i) {
+            for(int j = 0; j < n; ++j) {
+                cin >> temp;
+                grid[i][j] = temp;
+            }
+        }
+
+        for(int i = 0; i < n; ++i)
+            for(int j = 0; j < n; ++j)
+                if(grid[i][j] == 'x')
+                    dfs(grid, i, j, n), ++ans;
+
+        cout << "Case " << c << ": " << ans << '\n';
+    }
 
     return 0;
 }

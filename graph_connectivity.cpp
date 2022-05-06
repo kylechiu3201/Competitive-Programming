@@ -88,10 +88,67 @@ bool is_prime(ll a) { if(a == 1) return 0; for(int i = 2; i <= round(sqrt(a)); +
 template <class T>
 void PVEC(vector<T> &v) { cout << "{"; for(auto x : v) cout << x << ", "; cout << "\b\b}"; }
 
+int get_parent(const vi& parent, const int& node) {
+    if(parent[node] == -1) return node;
+    return get_parent(parent, parent[node]);
+}
+
+void set_union(vi& parent, const int& par_u, const int& v) {
+    int next = parent[v];
+    parent[v] = par_u;
+    if(next != -1) set_union(parent, par_u, next);
+}
+
+void dfs(vvi& graph, int node, vi& visited) {
+    if(visited[node]) return;
+    visited[node] = true;
+    for(auto adj : graph[node]) dfs(graph, adj, visited);
+}
+
 int main() {
     ios_base::sync_with_stdio(0); cin.tie(0);
 
-    
+    string temp;
+    getline(cin, temp);
+    int t = stoi(temp);
+    getline(cin, temp);
+    while(t--) {
+        // Union Find Solution
+        getline(cin, temp);
+        int size = temp[0]-'A'+1;
+        vi parent(size, -1);
+        while(getline(cin, temp)) {
+            if(temp.empty()) break;
+            int u = temp[0]-'A', v = temp[1]-'A';
+            int par_u = get_parent(parent, u), par_v = get_parent(parent, v);
+            if(par_u != par_v) set_union(parent, par_u, v);
+        }
+        int ans = 0;
+        for(auto node : parent) ans += node == -1;
+        cout << ans << NEWL;
+        if(t) cout << NEWL;
+
+        // DFS Solution
+        // getline(cin, temp);
+        // int size = temp[0]-'A'+1;
+        // vi visited(size);
+        // vvi graph(size);
+        // while(getline(cin, temp)) {
+        //     if(temp.empty()) break;
+        //     int u = temp[0]-'A', v = temp[1]-'A';
+        //     graph[u].pb(v);
+        //     graph[v].pb(u);
+        // }
+        // int ans = 0;
+        // for(int node = 0; node < size; ++node) {
+        //     if(!visited[node]) {
+        //         ++ans;
+        //         dfs(graph, node, visited);
+        //     }
+        // }
+        // cout << ans << NEWL;
+        // if(t) cout << NEWL;
+    }
 
     return 0;
 }
